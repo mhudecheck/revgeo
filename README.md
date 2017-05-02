@@ -1,6 +1,17 @@
-# Reverse Geocoding in R with Google Maps API and Photon API
+# Reverse Geocoding in R with Google Maps and Photon 
 
-This code lets you reverse geocode coordinate pairs with Google Maps and Photon.
+This code lets you reverse geocode coordinate pairs with Google Maps and Photon.  As far as I'm aware, it's the first package in R which specifically allows you to reverse geocode (as opposed to geocode) with Photon and OpenStreetMaps.  This is pretty important, since the Google Maps API is limited to 2,500 (free) queries a day.
+
+You can install revgeo() with the devtools package:
+```
+library(devtools)
+install_github("mhudecheck/revgeo")
+```
+You can use revgeo() by:
+```
+library('revgeo')
+revgeo(latitude, longitude, google=NULL, API=NULL, output=NULL, item=NULL)
+```
 
 You can specify whether you want the output to be a string, a hashed string, or a dataframe with option="string" | "hash" | "frame".
 
