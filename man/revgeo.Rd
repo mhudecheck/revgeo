@@ -3,28 +3,34 @@
 \name{revgeo}
 \alias{revgeo}
 \title{Reverse Geocoding with R, Google Maps, and Photon.}
+\source{
+https://github.com/mhudecheck/revgeo/
+}
 \usage{
 revgeo(longitude, latitude, google = NULL, API = NULL, output = NULL,
   item = NULL)
 }
 \arguments{
-\item{longitude}{Valid longitude coordinate;  e.g., -86.46444}
+\item{longitude}{Required. You must enter a valid longitude coordinate;  e.g., -86.46444}
 
-\item{latitude}{Valid latitude coordunate; e.g., 33.94954}
+\item{latitude}{Required. You must enter a valid latitude coordinate; e.g., 33.94954}
 
-\item{google}{Defaults to NULL, which specifies Photon API. Enter TRUE to select Google Maps API.}
+\item{google}{Defaults to NULL, which automatically selects the Photon API. Enter TRUE to use the Google Maps API.}
 
-\item{API}{Defaults to NULL. Enter a valid Google Maps API key to use Google Maps API.}
+\item{API}{Defaults to NULL. Enter a valid Google Maps API key to use the Google Maps API.}
 
-\item{output}{Defaults to NULL, which returns a reverse geocoded address as a string.  Valid options: 'hash', which returns a hashed string, and 'frame', which returns a dataframe.}
+\item{output}{Defaults to NULL, which returns a reverse geocoded address as a string.  Other valid options include 'hash', which returns a hashed string, and 'frame', which returns a dataframe.}
 
-\item{item}{Defaults to NULL, which returns all results.  When output is set to 'hash' or 'frame', this argument let's you specify which portion of the address you want returned; e.g., 'zip' for zipcode. Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.}
+\item{item}{Defaults to NULL. You can use 'item' in conjunction with 'hash' or 'frame' to return portion of the address; e.g., 'zip' for postal code Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.}
 }
 \description{
 This function allows you to use the Google Maps API and the Photon API to reverse geocode coordinate pairs.
 }
 \examples{
-revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash', item='zip')
+# Return an address as a string by querying the Photon API: revgeo(longitude=-86.46222, latitude=33.94954)
+# Return a hashed string by querying the Google Maps API: revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash')
+# Return a dataframe by querying the Photon API: revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='frame')
+# Return a postal code for coordinate pair by querying the Photon API and setting item='zip': revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash', item='zip)
 }
 \author{
 Michael Hudecheck, \email{michael.hudecheck@gess.ethz.ch}

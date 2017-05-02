@@ -10,19 +10,24 @@
 # It's since turned into a complete rewrite, with the added benefit of allowing reverse geoocoding with Google Maps API
 # As far as I'm aware, there is no shared code between the two projects, but kudos to them for introducing the Photon API to the community
 
-# Please leave any issues or break/fix actions at github
+# Please send any issues or break/fix actions at https://github.com/mhudecheck/revgeo/issues
+# This package is licensed under GPL 3.0
 # Please contact Mike Hudecheck at michaehu@gess.ethz.ch if you have any questions
 
 #' Reverse Geocoding with R, Google Maps, and Photon.
 #' @description This function allows you to use the Google Maps API and the Photon API to reverse geocode coordinate pairs.  
 #' @author Michael Hudecheck, \email{michael.hudecheck@gess.ethz.ch}
-#' @param longitude Valid longitude coordinate;  e.g., -86.46444
-#' @param latitude Valid latitude coordunate; e.g., 33.94954
-#' @param google Defaults to NULL, which specifies Photon API. Enter TRUE to select Google Maps API.
-#' @param API Defaults to NULL. Enter a valid Google Maps API key to use Google Maps API. 
-#' @param output Defaults to NULL, which returns a reverse geocoded address as a string.  Valid options: 'hash', which returns a hashed string, and 'frame', which returns a dataframe.
-#' @param item Defaults to NULL, which returns all results.  When output is set to 'hash' or 'frame', this argument let's you specify which portion of the address you want returned; e.g., 'zip' for zipcode. Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.
-#' @examples revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash', item='zip')
+#' @param longitude Required. You must enter a valid longitude coordinate;  e.g., -86.46444
+#' @param latitude Required. You must enter a valid latitude coordinate; e.g., 33.94954
+#' @param google Defaults to NULL, which automatically selects the Photon API. Enter TRUE to use the Google Maps API.
+#' @param API Defaults to NULL. Enter a valid Google Maps API key to use the Google Maps API. 
+#' @param output Defaults to NULL, which returns a reverse geocoded address as a string.  Other valid options include 'hash', which returns a hashed string, and 'frame', which returns a dataframe.
+#' @param item Defaults to NULL. You can use 'item' in conjunction with 'hash' or 'frame' to return portion of the address; e.g., 'zip' for postal code Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.
+#' @examples # Return an address as a string by querying the Photon API: revgeo(longitude=-86.46222, latitude=33.94954)
+#' @examples # Return a hashed string by querying the Google Maps API: revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash')
+#' @examples # Return a dataframe by querying the Photon API: revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='frame')
+#' @examples # Return a postal code for coordinate pair by querying the Photon API and setting item='zip': revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash', item='zip)
+#' @source https://github.com/mhudecheck/revgeo/
 #' @keywords reverse 
 #' @keywords geocode
 #' @import RCurl 
