@@ -2,10 +2,7 @@
 % Please edit documentation in R/revgeo.R
 \name{revgeo}
 \alias{revgeo}
-\title{Reverse Geocoding with R, Google Maps, and Photon
-This function enables reverse geocoding with Google Maps and the Photon API
-You must provide a valid Google Maps API to reverse geocode with the Google Maps API
-Google Maps is faster and more accurate than Photon, but there's a 2,500 item a day limit}
+\title{Reverse Geocoding with R, Google Maps, and Photon.}
 \usage{
 revgeo(longitude, latitude, google = NULL, API = NULL, output = NULL,
   item = NULL)
@@ -24,13 +21,9 @@ revgeo(longitude, latitude, google = NULL, API = NULL, output = NULL,
 \item{item}{Defaults to NULL, which returns all results.  When output is set to 'hash' or 'frame', this argument let's you specify which portion of the address you want returned; e.g., 'zip' for zipcode. Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.}
 }
 \description{
-Reverse Geocoding with R, Google Maps, and Photon
-This function enables reverse geocoding with Google Maps and the Photon API
-You must provide a valid Google Maps API to reverse geocode with the Google Maps API
-Google Maps is faster and more accurate than Photon, but there's a 2,500 item a day limit
+This function allows you to use the Google Maps API and the Photon API to reverse geocode coordinate pairs.
 }
 \examples{
-revgeo(longitude=longitude, latitude=latitude, google=NULL, API=NULL, output=NULL, item=NULL)
 revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash', item='zip')
 }
 \author{
