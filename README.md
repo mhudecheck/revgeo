@@ -28,9 +28,13 @@ library('revgeo')
 # Returns: "146 National Plaza, Fort Washington, Maryland, 20745, United States of America"
 ```
 You can use output='hash' to return a hashed string and output='frame' to return a dataframe with seperate columns for house numbers, streets, cities, counties, states, countries, and postal codes. 
+```
+library('revgeo')
 
-You can use output='hash' or output='frame' with item='housenumber', 'street', 'city', 'county', 'state', and 'country' to return anyone of those values. 
-
+# Example: result <- revgeo(-77.016472, 38.785026, output="frame")
+# Returns: data frame (result) with names(result) equal to 'housenumber', 'street', 'city', 'county', 'state', and 'country'.
+```
+You can also use output='hash' or output='frame' with item='housenumber', 'street', 'city', 'county', 'state', and 'country' to return any one of those values. 
 ```
 library('revgeo')
 
@@ -45,4 +49,4 @@ You can find documentation on the Photon API at: http://photon.komoot.de/
 
 This package started as an extension to RPhoton/geocode to enable reverse geocoding with Photon, but it's since turned into a complete rewrite, with the added benefit of being able to use the Google Maps API without having to load multiple libraries.  If you'd like to geocode an address with Photon (and not reverse geocode latitude/longitude coordinates), you easily use their library at https://github.com/rCarto/photon/blob/master/R/geocode.R. 
 
-I'll try to get around to including standard geocoding in this package, but it won't happen in the next couple of weeks.
+I'll try to get around to including standard geocoding in this package, but it isn't a promise.
