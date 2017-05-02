@@ -25,9 +25,9 @@
 #' @examples revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash', item='zip')
 #' @keywords reverse 
 #' @keywords geocode
-#' @export
 #' @import RCurl 
 #' @import RJSONIO
+#' @export
 
 revgeo <- function(longitude, latitude, google=NULL, API=NULL, output=NULL, item=NULL) {
   if(missing(google)) {
@@ -183,76 +183,3 @@ revgeo <- function(longitude, latitude, google=NULL, API=NULL, output=NULL, item
     return(as.data.frame(geocode_data))
   }
 }
-      
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
