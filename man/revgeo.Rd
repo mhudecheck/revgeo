@@ -2,7 +2,7 @@
 % Please edit documentation in R/revgeo.R
 \name{revgeo}
 \alias{revgeo}
-\title{Reverse Geocoding with R, the Photon Geocoder for OpenStreetMap, and Google Maps.}
+\title{Reverse Geocoding with the Photon Geocoder for OpenStreetMap and Google Maps.}
 \source{
 https://github.com/mhudecheck/revgeo/
 }
@@ -21,7 +21,7 @@ revgeo(longitude, latitude, google = NULL, API = NULL, output = NULL,
 
 \item{output}{Defaults to NULL, which returns a reverse geocoded address as a string.  Other valid options include 'hash', which returns a hashed string, and 'frame', which returns a dataframe.}
 
-\item{item}{Defaults to NULL. You can use 'item' in conjunction with 'hash' or 'frame' to return portion of the address; e.g., 'zip' for postal code Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.}
+\item{item}{Defaults to NULL. You can use 'item' in conjunction with 'hash' or 'frame' to return portion of the address; e.g., 'zip' for postal code. Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.}
 }
 \description{
 Enables the use of the Photon geocoder for OpenStreetMap and Google Maps to reverse geocode coordinate pairs. Photon allows for unlimited geocode queries, while Google Maps provides a little more information for 'out of the way' locations. Google Maps requires an API key and limits users to 2,500 free queries a day.

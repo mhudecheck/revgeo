@@ -9,7 +9,7 @@
 # This package is licensed under GPL 3.0
 # Please contact Mike Hudecheck at michael.hudecheck@gess.ethz.ch if you have any questions
 
-#' Reverse Geocoding with R, the Photon Geocoder for OpenStreetMap, and Google Maps.
+#' Reverse Geocoding with the Photon Geocoder for OpenStreetMap and Google Maps.
 #' @description Enables the use of the Photon geocoder for OpenStreetMap and Google Maps to reverse geocode coordinate pairs. Photon allows for unlimited geocode queries, while Google Maps provides a little more information for 'out of the way' locations. Google Maps requires an API key and limits users to 2,500 free queries a day.  
 #' @author Michael Hudecheck, \email{michael.hudecheck@gess.ethz.ch}
 #' @param longitude Required. You must enter a valid longitude coordinate;  e.g., -77.0229529
