@@ -6,27 +6,22 @@
 # Specifying a hashed string or dataframe allows you to specify whether you want to return the entire results, or a single item with item=""
 # Valid options for 'items=' include 'housenumber', 'street', 'city', 'county', 'state', and 'country'
 
-# This project started out as an extension of https://github.com/rCarto/photon/blob/master/R/geocode.R to enable reverse geocoding with Photon API
-# It's since turned into a complete rewrite, with the added benefit of allowing reverse geoocoding with Google Maps API
-# As far as I'm aware, there is no shared code between the two projects, but kudos to them for introducing the Photon API to the community
-
-# Please send any issues or break/fix actions at https://github.com/mhudecheck/revgeo/issues
 # This package is licensed under GPL 3.0
-# Please contact Mike Hudecheck at michaehu@gess.ethz.ch if you have any questions
+# Please contact Mike Hudecheck at michael.hudecheck@gess.ethz.ch if you have any questions
 
-#' Reverse Geocoding with R, Google Maps, and Photon.
-#' @description This function allows you to use the Google Maps API and the Photon API to reverse geocode coordinate pairs.  
+#' Reverse Geocoding with R, the Photon Geocoder for OpenStreetMap, and Google Maps.
+#' @description Enables the use of the Photon geocoder for OpenStreetMap and Google Maps to reverse geocode coordinate pairs. Photon allows for unlimited geocode queries, while Google Maps provides a little more information for 'out of the way' locations. Google Maps requires an API key and limits users to 2,500 free queries a day.  
 #' @author Michael Hudecheck, \email{michael.hudecheck@gess.ethz.ch}
-#' @param longitude Required. You must enter a valid longitude coordinate;  e.g., -86.46444
-#' @param latitude Required. You must enter a valid latitude coordinate; e.g., 33.94954
+#' @param longitude Required. You must enter a valid longitude coordinate;  e.g., -77.0229529
+#' @param latitude Required. You must enter a valid latitude coordinate; e.g., 38.89283435
 #' @param google Defaults to NULL, which automatically selects the Photon API. Enter TRUE to use the Google Maps API.
 #' @param API Defaults to NULL. Enter a valid Google Maps API key to use the Google Maps API. 
 #' @param output Defaults to NULL, which returns a reverse geocoded address as a string.  Other valid options include 'hash', which returns a hashed string, and 'frame', which returns a dataframe.
-#' @param item Defaults to NULL. You can use 'item' in conjunction with 'hash' or 'frame' to return portion of the address; e.g., 'zip' for postal code Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.
-#' @examples # Return an address as a string by querying the Photon API: revgeo(longitude=-86.46222, latitude=33.94954)
-#' @examples # Return a hashed string by querying the Google Maps API: revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash')
-#' @examples # Return a dataframe by querying the Photon API: revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='frame')
-#' @examples # Return a postal code for coordinate pair by querying the Photon API and setting item='zip': revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash', item='zip)
+#' @param item Defaults to NULL. You can use 'item' in conjunction with 'hash' or 'frame' to return portion of the address; e.g., 'zip' for postal code. Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.
+#' @examples 
+#' revgeo(longitude=-77.0229529, latitude=38.89283435)
+#' revgeo(longitude=-77.0229529, latitude=38.89283435, output='frame')
+#' revgeo(longitude=-77.0229529, latitude=38.89283435, output='hash', item='zip')
 #' @source https://github.com/mhudecheck/revgeo/
 #' @keywords reverse 
 #' @keywords geocode
@@ -34,7 +29,7 @@
 #' @import RJSONIO
 #' @export
 
-revgeo <- function(longitude, latitude, google=NULL, API=NULL, output=NULL, item=NULL) {
+revgeo <- function(longitude, latitude, google = NULL, API = NULL, output = NULL, item = NULL) {
   if(missing(google)) {
     google <- NULL
   }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/revgeo.R
 \name{revgeo}
 \alias{revgeo}
-\title{Reverse Geocoding with R, Google Maps, and Photon.}
+\title{Reverse Geocoding with R, the Photon Geocoder for OpenStreetMap, and Google Maps.}
 \source{
 https://github.com/mhudecheck/revgeo/
 }
@@ -11,9 +11,9 @@ revgeo(longitude, latitude, google = NULL, API = NULL, output = NULL,
   item = NULL)
 }
 \arguments{
-\item{longitude}{Required. You must enter a valid longitude coordinate;  e.g., -86.46444}
+\item{longitude}{Required. You must enter a valid longitude coordinate;  e.g., -77.0229529}
 
-\item{latitude}{Required. You must enter a valid latitude coordinate; e.g., 33.94954}
+\item{latitude}{Required. You must enter a valid latitude coordinate; e.g., 38.89283435}
 
 \item{google}{Defaults to NULL, which automatically selects the Photon API. Enter TRUE to use the Google Maps API.}
 
@@ -24,13 +24,12 @@ revgeo(longitude, latitude, google = NULL, API = NULL, output = NULL,
 \item{item}{Defaults to NULL. You can use 'item' in conjunction with 'hash' or 'frame' to return portion of the address; e.g., 'zip' for postal code Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.}
 }
 \description{
-This function allows you to use the Google Maps API and the Photon API to reverse geocode coordinate pairs.
+Enables the use of the Photon geocoder for OpenStreetMap and Google Maps to reverse geocode coordinate pairs. Photon allows for unlimited geocode queries, while Google Maps provides a little more information for 'out of the way' locations. Google Maps requires an API key and limits users to 2,500 free queries a day.
 }
 \examples{
-# Return an address as a string by querying the Photon API: revgeo(longitude=-86.46222, latitude=33.94954)
-# Return a hashed string by querying the Google Maps API: revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash')
-# Return a dataframe by querying the Photon API: revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='frame')
-# Return a postal code for coordinate pair by querying the Photon API and setting item='zip': revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API', output='hash', item='zip)
+revgeo(longitude=-77.0229529, latitude=38.89283435)
+revgeo(longitude=-77.0229529, latitude=38.89283435, output='frame')
+revgeo(longitude=-77.0229529, latitude=38.89283435, output='hash', item='zip')
 }
 \author{
 Michael Hudecheck, \email{michael.hudecheck@gess.ethz.ch}
