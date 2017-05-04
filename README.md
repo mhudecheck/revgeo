@@ -18,13 +18,13 @@ library('revgeo')
 # Usage: revgeo(longitude, latitude, provider=NULL, API=NULL, output=NULL, item=NULL)
 # Example: revgeo(longitude=-86.46222, latitude=33.94954, provider=NULL, API=NULL, output='hash', item='zip')
 ```
-You'll need to create a Google Maps API, set provider='google', and include your API key with API='your API key' if you want to use revgeo() with Google Maps:
+You'll need to create a Google Maps API, set provider='google' (or google=TRUE for v.11), and include your API key with API='your API key' if you want to use revgeo() with Google Maps:
 ```
 library('revgeo')
 
 # Example: revgeo(longitude=-86.46222, latitude=33.94954, provider='google', API='your API key')
 ```
-The same is true for Bing:
+The same is true for Bing if you're using v.12 (available from GitHub):
 ```
 library('revgeo')
 
