@@ -1,6 +1,6 @@
-# Reverse Geocoding in R with Google Maps and Photon 
+# Reverse Geocoding in R with Google Maps, Photon, and Bing
 
-This code lets you reverse geocode coordinate pairs with Google Maps and Photon.  As far as I'm aware, it's the first package in R which specifically allows you to use Photon and OpenStreetMaps to reverse geocode (as opposed to geocode).  This is pretty important, since the Google Maps API is limited to 2,500 free queries a day.
+This code lets you reverse geocode coordinate pairs with Google Maps, Photon, and Bing.  As far as I'm aware, it's the first package in R which specifically allows you to the Photon geocoder for OpenStreetMaps or Bing to reverse geocode (as opposed to geocode).  This is pretty important, since the Google Maps API is limited to 2,500 free queries a day.
 
 You can install revgeo() with the devtools package:
 ```
@@ -11,14 +11,20 @@ The syntax for revgeo() is pretty simple:
 ```
 library('revgeo')
 
-# Usage: revgeo(longitude, latitude, google=NULL, API=NULL, output=NULL, item=NULL)
-# Example: revgeo(longitude=-86.46222, latitude=33.94954, google=NULL, API=NULL, output='hash', item='zip')
+# Usage: revgeo(longitude, latitude, provider=NULL, API=NULL, output=NULL, item=NULL)
+# Example: revgeo(longitude=-86.46222, latitude=33.94954, provider=NULL, API=NULL, output='hash', item='zip')
 ```
-You'll need to create a Google Maps API, set google=TRUE, and include your API key with API='your API key' if you want to use revgeo() with Google Maps:
+You'll need to create a Google Maps API, set provider='google', and include your API key with API='your API key' if you want to use revgeo() with Google Maps:
 ```
 library('revgeo')
 
-# Example: revgeo(longitude=-86.46222, latitude=33.94954, google=TRUE, API='your API key')
+# Example: revgeo(longitude=-86.46222, latitude=33.94954, provider='google', API='your API key')
+```
+The same is true for Bing:
+```
+library('revgeo')
+
+# Example: revgeo(longitude=-86.46222, latitude=33.94954, provider='bing', API='your API key')
 ```
 There are a couple of neat things you can do with revgeo().  The default return is an address string:
 ```
@@ -45,8 +51,10 @@ The Revgeo package is still very much a work in progress, so please send any com
 
 You can find documentation on the Google Maps API at: https://developers.google.com/maps/documentation/geocoding/start.
 
-You can find documentation on the Photon API at: http://photon.komoot.de/
+You can find documentation on the Photon API at: http://photon.komoot.de/.
 
-This package started as an extension to RPhoton/geocode to enable reverse geocoding with Photon, but it's since turned into a complete rewrite, with the added benefit of being able to use the Google Maps API without having to load multiple libraries.  If you'd like to geocode an address with Photon (and not reverse geocode latitude/longitude coordinates), you easily use their library at https://github.com/rCarto/photon/blob/master/R/geocode.R. 
+You can find documentation on the Bing API at: https://www.bingmapsportal.com/Announcement?redirect=True.
+
+This package started as an extension to RPhoton/geocode to enable reverse geocoding with Photon, but it's since turned into a complete rewrite, with the added benefit of being able to use the Google Maps API and the Bing API without having to load multiple libraries.  If you'd like to geocode an address with Photon (and not reverse geocode latitude/longitude coordinates), you can easily use their library at https://github.com/rCarto/photon/blob/master/R/geocode.R. 
 
 I'll try to get around to including standard geocoding in this package, but it isn't a promise.
