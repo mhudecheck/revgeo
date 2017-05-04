@@ -2,12 +2,12 @@
 % Please edit documentation in R/revgeo.R
 \name{revgeo}
 \alias{revgeo}
-\title{Reverse Geocoding with the Photon Geocoder for OpenStreetMap and Google Maps.}
+\title{Reverse Geocoding with the Photon Geocoder for OpenStreetMap, Google Maps, and Bing.}
 \source{
 https://github.com/mhudecheck/revgeo/
 }
 \usage{
-revgeo(longitude, latitude, google = NULL, API = NULL, output = NULL,
+revgeo(longitude, latitude, provider = NULL, API = NULL, output = NULL,
   item = NULL)
 }
 \arguments{
@@ -15,16 +15,16 @@ revgeo(longitude, latitude, google = NULL, API = NULL, output = NULL,
 
 \item{latitude}{Required. You must enter a valid latitude coordinate; e.g., 38.89283435}
 
-\item{google}{Defaults to NULL, which automatically selects the Photon API. Enter TRUE to use the Google Maps API.}
+\item{provider}{Defaults to NULL, which automatically selects the Photon API. Enter 'google' to use the Google Maps API or 'bing' to use the Bing API.}
 
-\item{API}{Defaults to NULL. Enter a valid Google Maps API key to use the Google Maps API.}
+\item{API}{Defaults to NULL. Enter a valid Google Maps or Bing API key to use their service.}
 
 \item{output}{Defaults to NULL, which returns a reverse geocoded address as a string.  Other valid options include 'hash', which returns a hashed string, and 'frame', which returns a dataframe.}
 
 \item{item}{Defaults to NULL. You can use 'item' in conjunction with 'hash' or 'frame' to return portion of the address; e.g., 'zip' for postal code. Options include 'housenumber', 'street', 'city', 'county', 'state', and 'country'.}
 }
 \description{
-Enables the use of the Photon geocoder for OpenStreetMap and Google Maps to reverse geocode coordinate pairs. Photon allows for unlimited geocode queries, while Google Maps provides a little more information for 'out of the way' locations. Google Maps requires an API key and limits users to 2,500 free queries a day.
+Enables the use of the Photon geocoder for OpenStreetMap, Google Maps, and Bing to reverse geocode coordinate pairs. Photon allows for unlimited geocode queries, while Google Maps and Bing provide a little more information for 'out of the way' locations. Google Maps and Bing require an API key, and Google Maps limits users to 2,500 free queries a day.
 }
 \examples{
 revgeo(longitude=-77.0229529, latitude=38.89283435)
