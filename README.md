@@ -53,7 +53,7 @@ You can find documentation on the Google Maps API at: https://developers.google.
 
 You can find documentation on the Photon API at: http://photon.komoot.de/.
 
-You can find documentation on the Bing API at: https://www.bingmapsportal.com/Announcement?redirect=True.
+You can find documentation on the Bing API at: https://www.bingmapsportal.com/.
 
 This package started as an extension to RPhoton/geocode to enable reverse geocoding with Photon, but it's since turned into a complete rewrite, with the added benefit of being able to use the Google Maps API and the Bing API without having to load multiple libraries.  If you'd like to geocode an address with Photon (and not reverse geocode latitude/longitude coordinates), you can easily use their library at https://github.com/rCarto/photon/blob/master/R/geocode.R. 
 
