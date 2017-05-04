@@ -2,10 +2,14 @@
 
 This code lets you reverse geocode coordinate pairs with Google Maps, Photon, and Bing.  As far as I'm aware, it's the first package in R which specifically allows you to the Photon geocoder for OpenStreetMaps or Bing to reverse geocode (as opposed to geocode).  This is pretty important, since the Google Maps API is limited to 2,500 free queries a day.
 
-You can install revgeo() with the devtools package:
+You can install revgeo() through CRAN:
+```
+install.packages('revgeo')
+```
+You also install revgeo() with the devtools package:
 ```
 library(devtools)
-install_github("mhudecheck/revgeo")
+install_github('mhudecheck/revgeo')
 ```
 The syntax for revgeo() is pretty simple:
 ```
