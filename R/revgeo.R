@@ -216,17 +216,18 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
         message("There was an issue retrieving an address from Google Maps.  Please check that your coordinates are correct and try again.") 
       })
       if ("status" %in% colnames(returned_data) == TRUE) {
-          if(returned_data$status %in% "ZERO_RESULTS") {
-            print("Google Maps could not find an address for your coordinates.  Please double check that they are accurate and try again.")
-            return()
-          }
           if(returned_data$status %in% "REQUEST_DENIED") {
             print("There was an error accessing Google Maps.  Check your API key and try again.")
             return()
           }
-      } else if (is.atomic(returned_data) == FALSE) {
-        print("There was an issue retrieving an address from Google Maps.  Please check that your coordinates are correct and try again.")
-        return()
+      }
+      if(returned_data$status == "ZERO_RESULTS") {
+        message <- "Google Maps could not find an address for your coordinates.  Please double check that they are accurate and try again."
+        return(message)
+      }
+      if(returned_data$status %in% "REQUEST_DENIED") {
+        message <- "There was an error accessing Google Maps.  Check your API key and try again."
+        return(message)
       }
       address <- returned_data$results[[1]]$formatted_address
       l <- length(returned_data$results[[1]]$address_components)
