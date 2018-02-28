@@ -213,7 +213,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
                    i))
       data <- getURLAsynchronous(i)
       returned_data <- tryCatch(fromJSON(data), error = function(e) {
-        message("There was an issue retrieving an address from Google Maps.  Please check that your coordinates are correct and try again.") 
+        message("There was an issue retrieving an address from Google Maps.  Please check that your coordinates are correct and try again.")
       })
       if ("status" %in% colnames(returned_data) == TRUE) {
           if(returned_data$status %in% "REQUEST_DENIED") {
@@ -223,7 +223,8 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
       }
       if(returned_data$status == "ZERO_RESULTS") {
         message <- "Google Maps could not find an address for your coordinates.  Please double check that they are accurate and try again."
-        return(message)
+        print(message)
+        return(returned_data$status)
       }
       if(returned_data$status %in% "REQUEST_DENIED") {
         message <- "There was an error accessing Google Maps.  Check your API key and try again."
