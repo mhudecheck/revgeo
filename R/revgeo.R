@@ -54,7 +54,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
       print(paste0("Getting geocode data from Photon: ", 
                    i))
       data <- tryCatch(getURLAsynchronous(i), error = function(e) "Error")
-      returned_data <- tryCatch(fromJSON(data), error = function(e) "There was an issue retrieving an address from Photon.  Please check that your coordinates are correct and try again.")
+      returned_data <- tryCatch(jsonlite::fromJSON(data), error = function(e) "There was an issue retrieving an address from Photon.  Please check that your coordinates are correct and try again.")
       housenumber <- tryCatch(returned_data$features[[1]]$properties$housenumber, 
                               error = function(e) "House Number Not Found")
       street <- tryCatch(returned_data$features[[1]]$properties$street, 
@@ -141,7 +141,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
       print(paste0("Getting geocode data from Bing: ", 
                    i))
       data <- getURLAsynchronous(i)
-      returned_data <- tryCatch(fromJSON(data), error = function(e) "There was an issue retrieving an address from Bing.  Please check that your coordinates are coorect and try again.")
+      returned_data <- tryCatch(jsonlite::fromJSON(data), error = function(e) "There was an issue retrieving an address from Bing.  Please check that your coordinates are coorect and try again.")
       address_hash <- tryCatch(as.list(returned_data$resourceSets[[1]]$resources[[1]]$address), 
                                error = function(e) "House Number Not Found")
       street <- tryCatch(address_hash$addressLine, error = function(e) "House Number and Street Not Found")
@@ -212,7 +212,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
       print(paste0("Getting geocode data from Google: ", 
                    i))
       data <- getURLAsynchronous(i)
-      returned_data <- tryCatch(fromJSON(data), error = function(e) {
+      returned_data <- tryCatch(jsonlite::fromJSON(data), error = function(e) {
         message("There was an issue retrieving an address from Google Maps.  Please check that your coordinates are correct and try again.")
       })
       if ("status" %in% colnames(returned_data) == TRUE) {
