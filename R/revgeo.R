@@ -48,7 +48,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
   geocode_data <- list()
   geocode_frame <- data.frame()
   if (is.null(provider) || (provider %in% "photon")) {
-    url <- paste0("http://photon.komoot.de/reverse?lon=", 
+    url <- paste0("https://photon.komoot.de/reverse?lon=", 
                   longitude, "&lat=", latitude)
     for (i in url) {
       print(paste0("Getting geocode data from Photon: ", 
