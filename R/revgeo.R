@@ -60,7 +60,10 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
         } else {
           warning(paste0("Error encountered upon retrieving data from ", provider, ": ", response$url))
         }
-        responses[[id]] <<- response
+        response_char <- rawToChar(response$content)
+        Encoding(response_char) <- "UTF-8"
+        response_parsed <- jsonlite::fromJSON(response_char)
+        responses[[id]] <<- response_parsed
       }
     }
     errorhandle <- function(response) {
@@ -84,7 +87,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
     responses <- async_download(url)
     
     for (response in responses) {
-      returned_data <- tryCatch(jsonlite::fromJSON(rawToChar(response$content)), error = function(e) "There was an issue retrieving an address from Photon.  Please check that your coordinates are correct and try again.")
+      returned_data <- tryCatch(response, error = function(e) "There was an issue retrieving an address from Photon.  Please check that your coordinates are correct and try again.")
       housenumber <- tryCatch(returned_data$features$properties$housenumber, 
                               error = function(e) "House Number Not Found")
       street <- tryCatch(returned_data$features$properties$street, 
@@ -171,7 +174,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
     responses <- async_download(url)
     
     for (response in responses) {
-      returned_data <- tryCatch(jsonlite::fromJSON(rawToChar(response$content)), error = function(e) "There was an issue retrieving an address from Bing.  Please check that your coordinates are coorect and try again.")
+      returned_data <- tryCatch(response, error = function(e) "There was an issue retrieving an address from Bing.  Please check that your coordinates are coorect and try again.")
       address_hash <- tryCatch(as.list(returned_data$resourceSets$resources[[1]]$address), 
                                error = function(e) "House Number Not Found")
       street <- tryCatch(address_hash$addressLine[[1]], error = function(e) "House Number and Street Not Found")
