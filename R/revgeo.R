@@ -45,18 +45,20 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
   if (missing(item)) {
     item <- NULL
   }
+  
   geocode_data <- list()
   geocode_frame <- data.frame()
   
-  async_download <- function(url) {
+  async_download <- function(url, provider="photon") {
+    substr(provider, 1, 1) <- toupper(substr(provider, 1, 1))
     responses <- vector(mode = "list", length = length(url))
     url_ids <- seq_along(url)
     callback <- function(id){
       function(response){
         if (response$status_code == 200) {
-          print(paste0("Getting geocode data from Photon: ", response$url))
+          print(paste0("Getting geocode data from ", provider, ": ", response$url))
         } else {
-          warning(paste0("Error encountered upon retrieving data from Photon: ", response$url))
+          warning(paste0("Error encountered upon retrieving data from ", provider, ": ", response$url))
         }
         responses[[id]] <<- response
       }
