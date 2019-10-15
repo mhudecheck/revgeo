@@ -47,25 +47,53 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
   }
   geocode_data <- list()
   geocode_frame <- data.frame()
+  
+  async_download <- function(url) {
+    responses <- vector(mode = "list", length = length(url))
+    url_ids <- seq_along(url)
+    callback <- function(id){
+      function(response){
+        if (response$status_code == 200) {
+          print(paste0("Getting geocode data from Photon: ", response$url))
+        } else {
+          warning(paste0("Error encountered upon retrieving data from Photon: ", response$url))
+        }
+        responses[[id]] <<- response
+      }
+    }
+    errorhandle <- function(response) {
+      warning(response)
+    }
+    cbfuns <- lapply(url_ids, callback)
+    p <- curl::new_pool(total_con = 10, host_con = 5)
+    for (i in seq_along(url)) {
+      curl::curl_fetch_multi(url[i], done = cbfuns[[i]], fail = errorhandle, handle = curl::new_handle(failonerror = FALSE), pool = p)
+    }
+    curl::multi_run(pool = p)
+    
+    return(responses)
+  }
+  
+  
   if (is.null(provider) || (provider %in% "photon")) {
-    url <- paste0("http://photon.komoot.de/reverse?lon=", 
+    url <- paste0("https://photon.komoot.de/reverse?lon=", 
                   longitude, "&lat=", latitude)
-    for (i in url) {
-      print(paste0("Getting geocode data from Photon: ", 
-                   i))
-      data <- tryCatch(getURLAsynchronous(i), error = function(e) "Error")
-      returned_data <- tryCatch(fromJSON(data), error = function(e) "There was an issue retrieving an address from Photon.  Please check that your coordinates are correct and try again.")
-      housenumber <- tryCatch(returned_data$features[[1]]$properties$housenumber, 
+    
+    responses <- async_download(url)
+    
+    for (response in responses) {
+      returned_data <- tryCatch(jsonlite::fromJSON(rawToChar(response$content)), error = function(e) "There was an issue retrieving an address from Photon.  Please check that your coordinates are correct and try again.")
+      housenumber <- tryCatch(returned_data$features$properties$housenumber, 
                               error = function(e) "House Number Not Found")
-      street <- tryCatch(returned_data$features[[1]]$properties$street, 
+      street <- tryCatch(returned_data$features$properties$street, 
                          error = function(e) "Street Not Found")
-      city <- tryCatch(returned_data$features[[1]]$properties$city, 
+      city <- tryCatch(returned_data$features$properties$city, 
                        error = function(e) "City Not Found")
-      zip <- tryCatch(returned_data$features[[1]]$properties$postcode, 
+      zip <- tryCatch(returned_data$features$properties$postcode, 
                       error = function(e) "Postcode Not Found")
-      state <- tryCatch(returned_data$features[[1]]$properties$state, 
+      state <- tryCatch(returned_data$features$properties$state, 
                         error = function(e) "State Not Found")
-      country <- tryCatch(returned_data$features[[1]]$properties$country, 
+      country <- tryCatch(returned_data$features$properties$country, 
                           error = function(e) "Country Not Found")
       if (is.null(housenumber)) {
         housenumber <- "House Number Not Found"
@@ -216,10 +244,10 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
         message("There was an issue retrieving an address from Google Maps.  Please check that your coordinates are correct and try again.")
       })
       if ("status" %in% colnames(returned_data) == TRUE) {
-          if(returned_data$status %in% "REQUEST_DENIED") {
-            print("There was an error accessing Google Maps.  Check your API key and try again.")
-            return()
-          }
+        if(returned_data$status %in% "REQUEST_DENIED") {
+          print("There was an error accessing Google Maps.  Check your API key and try again.")
+          return()
+        }
       }
       if(returned_data$status == "ZERO_RESULTS") {
         message <- "Google Maps could not find an address for your coordinates.  Please double check that they are accurate and try again."
