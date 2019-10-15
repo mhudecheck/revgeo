@@ -167,20 +167,20 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
         item <- "street"
       }
     }
-    for (i in url) {
-      print(paste0("Getting geocode data from Bing: ", 
-                   i))
-      data <- getURLAsynchronous(i)
-      returned_data <- tryCatch(fromJSON(data), error = function(e) "There was an issue retrieving an address from Bing.  Please check that your coordinates are coorect and try again.")
-      address_hash <- tryCatch(as.list(returned_data$resourceSets[[1]]$resources[[1]]$address), 
+    
+    responses <- async_download(url)
+    
+    for (response in responses) {
+      returned_data <- tryCatch(jsonlite::fromJSON(rawToChar(response$content)), error = function(e) "There was an issue retrieving an address from Bing.  Please check that your coordinates are coorect and try again.")
+      address_hash <- tryCatch(as.list(returned_data$resourceSets$resources[[1]]$address), 
                                error = function(e) "House Number Not Found")
-      street <- tryCatch(address_hash$addressLine, error = function(e) "House Number and Street Not Found")
-      city <- tryCatch(address_hash$locality, error = function(e) "City Not Found")
-      state <- tryCatch(address_hash$adminDistrict, error = function(e) "State Not Found")
-      zip <- tryCatch(address_hash$postalCode, error = function(e) "Postcode Not Found")
-      country <- tryCatch(address_hash$countryRegion, 
+      street <- tryCatch(address_hash$addressLine[[1]], error = function(e) "House Number and Street Not Found")
+      city <- tryCatch(address_hash$locality[[1]], error = function(e) "City Not Found")
+      state <- tryCatch(address_hash$adminDistrict[[1]], error = function(e) "State Not Found")
+      zip <- tryCatch(address_hash$postalCode[[1]], error = function(e) "Postcode Not Found")
+      country <- tryCatch(address_hash$countryRegion[[1]], 
                           error = function(e) "Country Not Found")
-      address_string <- tryCatch(address_hash$formattedAddress, 
+      address_string <- tryCatch(address_hash$formattedAddress[[1]], 
                                  error = function(e) "Address Number Not Found")
       if (is.null(street)) {
         street <- "House Number and Street Not Found"
