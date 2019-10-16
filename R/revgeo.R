@@ -27,8 +27,8 @@
 #' @source https://github.com/mhudecheck/revgeo/
 #' @keywords reverse 
 #' @keywords geocode
-#' @import RCurl 
-#' @import RJSONIO
+#' @import curl 
+#' @import jsonlite
 #' @export
 
 revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = NULL, item = NULL) 
