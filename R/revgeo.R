@@ -101,18 +101,17 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
     responses <- async_download(url, provider)
     
     for (response in responses) {
-      returned_data <- tryCatch(response, error = function(e) "There was an issue retrieving an address from Photon.  Please check that your coordinates are correct and try again.")
-      housenumber <- tryCatch(returned_data$features$properties$housenumber, 
+      housenumber <- tryCatch(response$features$properties$housenumber, 
                               error = function(e) "House Number Not Found")
-      street <- tryCatch(returned_data$features$properties$street, 
+      street <- tryCatch(response$features$properties$street, 
                          error = function(e) "Street Not Found")
-      city <- tryCatch(returned_data$features$properties$city, 
+      city <- tryCatch(response$features$properties$city, 
                        error = function(e) "City Not Found")
-      zip <- tryCatch(returned_data$features$properties$postcode, 
+      zip <- tryCatch(response$features$properties$postcode, 
                       error = function(e) "Postcode Not Found")
-      state <- tryCatch(returned_data$features$properties$state, 
+      state <- tryCatch(response$features$properties$state, 
                         error = function(e) "State Not Found")
-      country <- tryCatch(returned_data$features$properties$country, 
+      country <- tryCatch(response$features$properties$country, 
                           error = function(e) "Country Not Found")
       if (is.null(housenumber)) {
         housenumber <- "House Number Not Found"
@@ -188,8 +187,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
     responses <- async_download(url, provider)
     
     for (response in responses) {
-      returned_data <- tryCatch(response, error = function(e) "There was an issue retrieving an address from Bing.  Please check that your coordinates are coorect and try again.")
-      address_hash <- tryCatch(as.list(returned_data$resourceSets$resources[[1]]$address), 
+      address_hash <- tryCatch(as.list(response$resourceSets$resources[[1]]$address), 
                                error = function(e) "House Number Not Found")
       street <- tryCatch(address_hash$addressLine[[1]], error = function(e) "House Number and Street Not Found")
       city <- tryCatch(address_hash$locality[[1]], error = function(e) "City Not Found")
