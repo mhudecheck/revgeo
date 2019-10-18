@@ -49,18 +49,21 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
   geocode_data <- list()
   geocode_frame <- data.frame()
   
-  async_download <- function(url, provider="photon") {
+  async_download <- function(url, provider) {
+    
+    if (is.null(provider)) {provider <- "photon"}
+    
     provider_title <- paste0(toupper(substr(provider, 1, 1)), substr(provider, 2, nchar(provider)))
     responses <- vector(mode = "list", length = length(url))
     url_ids <- seq_along(url)
+    
     callback <- function(id){
       function(response){
         
         content_char <- rawToChar(response$content)
         Encoding(content_char) <- "UTF-8"
-        content_parsed <- jsonlite::fromJSON(content_char)
         
-        if (response$status_code != 200) {
+        if (!jsonlite::validate(content_char)) {
           warning(paste0("Error encountered upon retrieving data from ", provider_title, ": ", response$url))
         } else if (provider == "google") {
           if (content_parsed$status == "ZERO_RESULTS") {
@@ -74,6 +77,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
           }
         } else {
           print(paste0("Getting geocode data from ", provider_title, ": ", response$url))
+          content_parsed <- jsonlite::fromJSON(content_char)
           response <- content_parsed
         }
         
@@ -81,6 +85,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
       }
     }
     errorhandle <- function(response) {
+      message <- paste0("The request returned the status code: ", response$status_code, ". Please check that the provided API key is correct.")
       warning(response)
     }
     cbfuns <- lapply(url_ids, callback)
