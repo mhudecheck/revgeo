@@ -7,8 +7,8 @@
 https://github.com/mhudecheck/revgeo/
 }
 \usage{
-revgeo(longitude, latitude, provider = NULL, API = NULL, output = NULL,
-  item = NULL)
+revgeo(longitude, latitude, provider = NULL, API = NULL,
+  output = NULL, item = NULL)
 }
 \arguments{
 \item{longitude}{Required. You must enter a valid longitude coordinate;  e.g., -77.0229529}
@@ -30,6 +30,8 @@ Enables the use of the Photon geocoder for OpenStreetMap, Google Maps, and Bing 
 revgeo(longitude=-77.0229529, latitude=38.89283435)
 revgeo(longitude=-77.0229529, latitude=38.89283435, output='frame')
 revgeo(longitude=-77.0229529, latitude=38.89283435, output='hash', item='zip')
+revgeo(longitude=-86.46222, latitude=33.94954, provider='google', API='your API key')
+revgeo(longitude=-86.46222, latitude=33.94954, provider='bing', API='your API key')
 }
 \author{
 Michael Hudecheck, \email{michael.hudecheck@gess.ethz.ch}

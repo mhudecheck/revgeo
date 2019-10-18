@@ -27,8 +27,8 @@
 #' @source https://github.com/mhudecheck/revgeo/
 #' @keywords reverse 
 #' @keywords geocode
-#' @import RCurl 
-#' @import RJSONIO
+#' @import curl 
+#' @import jsonlite
 #' @export
 
 revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = NULL, item = NULL) 
@@ -45,23 +45,47 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
   if (missing(item)) {
     item <- NULL
   }
+  
   geocode_data <- list()
   geocode_frame <- data.frame()
   
-  async_download <- function(url) {
+  async_download <- function(url, provider) {
+    
+    if (is.null(provider)) {provider <- "photon"}
+    
+    provider_title <- paste0(toupper(substr(provider, 1, 1)), substr(provider, 2, nchar(provider)))
     responses <- vector(mode = "list", length = length(url))
     url_ids <- seq_along(url)
+    
     callback <- function(id){
       function(response){
-        if (response$status_code == 200) {
-          print(paste0("Getting geocode data from Photon: ", response$url))
+        
+        content_char <- rawToChar(response$content)
+        Encoding(content_char) <- "UTF-8"
+        
+        if (!jsonlite::validate(content_char)) {
+          warning(paste0("Error encountered upon retrieving data from ", provider_title, ": ", response$url))
+        } else if (provider == "google") {
+          if (content_parsed$status == "ZERO_RESULTS") {
+            message <- "Google Maps could not find an address for your coordinates.  Please double check that they are accurate and try again."
+            warning(message)
+            response <- message
+          } else if(content_parsed$status %in% "REQUEST_DENIED") {
+            message <- "There was an error accessing Google Maps.  Check your API key and try again."
+            warning(message)
+            response <- message
+          }
         } else {
-          warning(paste0("Error encountered upon retrieving data from Photon: ", response$url))
+          print(paste0("Getting geocode data from ", provider_title, ": ", response$url))
+          content_parsed <- jsonlite::fromJSON(content_char)
+          response <- content_parsed
         }
+        
         responses[[id]] <<- response
       }
     }
     errorhandle <- function(response) {
+      message <- paste0("The request returned the status code: ", response$status_code, ". Please check that the provided API key is correct.")
       warning(response)
     }
     cbfuns <- lapply(url_ids, callback)
@@ -79,21 +103,20 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
     url <- paste0("https://photon.komoot.de/reverse?lon=", 
                   longitude, "&lat=", latitude)
     
-    responses <- async_download(url)
+    responses <- async_download(url, provider)
     
     for (response in responses) {
-      returned_data <- tryCatch(jsonlite::fromJSON(rawToChar(response$content)), error = function(e) "There was an issue retrieving an address from Photon.  Please check that your coordinates are correct and try again.")
-      housenumber <- tryCatch(returned_data$features$properties$housenumber, 
+      housenumber <- tryCatch(response$features$properties$housenumber, 
                               error = function(e) "House Number Not Found")
-      street <- tryCatch(returned_data$features$properties$street, 
+      street <- tryCatch(response$features$properties$street, 
                          error = function(e) "Street Not Found")
-      city <- tryCatch(returned_data$features$properties$city, 
+      city <- tryCatch(response$features$properties$city, 
                        error = function(e) "City Not Found")
-      zip <- tryCatch(returned_data$features$properties$postcode, 
+      zip <- tryCatch(response$features$properties$postcode, 
                       error = function(e) "Postcode Not Found")
-      state <- tryCatch(returned_data$features$properties$state, 
+      state <- tryCatch(response$features$properties$state, 
                         error = function(e) "State Not Found")
-      country <- tryCatch(returned_data$features$properties$country, 
+      country <- tryCatch(response$features$properties$country, 
                           error = function(e) "Country Not Found")
       if (is.null(housenumber)) {
         housenumber <- "House Number Not Found"
@@ -165,20 +188,19 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
         item <- "street"
       }
     }
-    for (i in url) {
-      print(paste0("Getting geocode data from Bing: ", 
-                   i))
-      data <- getURLAsynchronous(i)
-      returned_data <- tryCatch(fromJSON(data), error = function(e) "There was an issue retrieving an address from Bing.  Please check that your coordinates are coorect and try again.")
-      address_hash <- tryCatch(as.list(returned_data$resourceSets[[1]]$resources[[1]]$address), 
+    
+    responses <- async_download(url, provider)
+    
+    for (response in responses) {
+      address_hash <- tryCatch(as.list(response$resourceSets$resources[[1]]$address), 
                                error = function(e) "House Number Not Found")
-      street <- tryCatch(address_hash$addressLine, error = function(e) "House Number and Street Not Found")
-      city <- tryCatch(address_hash$locality, error = function(e) "City Not Found")
-      state <- tryCatch(address_hash$adminDistrict, error = function(e) "State Not Found")
-      zip <- tryCatch(address_hash$postalCode, error = function(e) "Postcode Not Found")
-      country <- tryCatch(address_hash$countryRegion, 
+      street <- tryCatch(address_hash$addressLine[[1]], error = function(e) "House Number and Street Not Found")
+      city <- tryCatch(address_hash$locality[[1]], error = function(e) "City Not Found")
+      state <- tryCatch(address_hash$adminDistrict[[1]], error = function(e) "State Not Found")
+      zip <- tryCatch(address_hash$postalCode[[1]], error = function(e) "Postcode Not Found")
+      country <- tryCatch(address_hash$countryRegion[[1]], 
                           error = function(e) "Country Not Found")
-      address_string <- tryCatch(address_hash$formattedAddress, 
+      address_string <- tryCatch(address_hash$formattedAddress[[1]], 
                                  error = function(e) "Address Number Not Found")
       if (is.null(street)) {
         street <- "House Number and Street Not Found"
@@ -236,55 +258,41 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
     url <- paste0("https://maps.googleapis.com/maps/api/geocode/json?latlng=", 
                   latitude, ",", longitude, "&key=", API)
     postcode <- list()
-    for (i in url) {
-      print(paste0("Getting geocode data from Google: ", 
-                   i))
-      data <- getURLAsynchronous(i)
-      returned_data <- tryCatch(fromJSON(data), error = function(e) {
-        message("There was an issue retrieving an address from Google Maps.  Please check that your coordinates are correct and try again.")
-      })
-      if ("status" %in% colnames(returned_data) == TRUE) {
-        if(returned_data$status %in% "REQUEST_DENIED") {
-          print("There was an error accessing Google Maps.  Check your API key and try again.")
-          return()
+    responses <- async_download(url, provider)
+    
+    for (response in responses) {
+      
+      if ("results" %in% colnames(response) == TRUE) {
+        address <- response$results$formatted_address
+        l <- length(response$results$address_components)
+        k <- 1
+        while (k <= l) {
+          j <- response$results$address_components[[k]]
+          if (j$types[1] == "street_number") {
+            housenumber <- tryCatch(j$short_name, error = function(e) "House Number Not Found")
+          }
+          else if (j$types[1] == "route") {
+            street <- tryCatch(j$long_name, error = function(e) "Street Not Found")
+          }
+          else if (j$types[1] == "locality") {
+            city <- tryCatch(j$long_name, error = function(e) "City Not Found")
+          }
+          else if (j$types[1] == "administrative_area_level_2") {
+            county <- tryCatch(j$long_name, error = function(e) "County Not Found")
+          }
+          else if (j$types[1] == "postal_code") {
+            zip <- tryCatch(j$long_name, error = function(e) "Postcode Not Found")
+          }
+          else if (j$types[1] == "administrative_area_level_1") {
+            state <- tryCatch(j$long_name, error = function(e) "State Not Found")
+          }
+          else if (j$types[1] == "country") {
+            country <- tryCatch(j$long_name, error = function(e) "State Not Found")
+          }
+          k <- k + 1
         }
-      }
-      if(returned_data$status == "ZERO_RESULTS") {
-        message <- "Google Maps could not find an address for your coordinates.  Please double check that they are accurate and try again."
-        print(message)
-        return(returned_data$status)
-      }
-      if(returned_data$status %in% "REQUEST_DENIED") {
-        message <- "There was an error accessing Google Maps.  Check your API key and try again."
-        return(message)
-      }
-      address <- returned_data$results[[1]]$formatted_address
-      l <- length(returned_data$results[[1]]$address_components)
-      k <- 1
-      while (k <= l) {
-        j <- returned_data$results[[1]]$address_components[[k]]
-        if (j$types[1] == "street_number") {
-          housenumber <- tryCatch(j$short_name, error = function(e) "House Number Not Found")
-        }
-        else if (j$types[1] == "route") {
-          street <- tryCatch(j$long_name, error = function(e) "Street Not Found")
-        }
-        else if (j$types[1] == "locality") {
-          city <- tryCatch(j$long_name, error = function(e) "City Not Found")
-        }
-        else if (j$types[1] == "administrative_area_level_2") {
-          county <- tryCatch(j$long_name, error = function(e) "County Not Found")
-        }
-        else if (j$types[1] == "postal_code") {
-          zip <- tryCatch(j$long_name, error = function(e) "Postcode Not Found")
-        }
-        else if (j$types[1] == "administrative_area_level_1") {
-          state <- tryCatch(j$long_name, error = function(e) "State Not Found")
-        }
-        else if (j$types[1] == "country") {
-          country <- tryCatch(j$long_name, error = function(e) "State Not Found")
-        }
-        k <- k + 1
+      } else {
+        address <- response
       }
       if (!(exists("housenumber"))) {
         housenumber <- "House Number Not Found"
