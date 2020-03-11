@@ -325,8 +325,8 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
                                       street)
         geocode_data[["city"]] <- c(geocode_data[["city"]], 
                                     city)
-        geocode_data[["county"]] <- c(geocode_data[["country"]], 
-                                      country)
+        geocode_data[["county"]] <- c(geocode_data[["county"]], 
+                                      county)
         geocode_data[["state"]] <- c(geocode_data[["state"]], 
                                      state)
         geocode_data[["zip"]] <- c(geocode_data[["zip"]], 
@@ -341,8 +341,8 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
                                       street)
         geocode_data[["city"]] <- c(geocode_data[["city"]], 
                                     city)
-        geocode_data[["county"]] <- c(geocode_data[["country"]], 
-                                      country)
+        geocode_data[["county"]] <- c(geocode_data[["county"]], 
+                                      county)
         geocode_data[["state"]] <- c(geocode_data[["state"]], 
                                      state)
         geocode_data[["zip"]] <- c(geocode_data[["zip"]], 
