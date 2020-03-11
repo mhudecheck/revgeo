@@ -211,6 +211,9 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
       if (is.null(zip)) {
         zip <- "Postcode Not Found"
       }
+      if (is.null(county)) {
+        county <- "County Not Found"
+      }
       if (is.null(state)) {
         state <- "State Not Found"
       }
