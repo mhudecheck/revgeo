@@ -211,6 +211,9 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
       if (is.null(zip)) {
         zip <- "Postcode Not Found"
       }
+      if (is.null(county)) {
+        county <- "County Not Found"
+      }
       if (is.null(state)) {
         state <- "State Not Found"
       }
@@ -325,8 +328,8 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
                                       street)
         geocode_data[["city"]] <- c(geocode_data[["city"]], 
                                     city)
-        geocode_data[["county"]] <- c(geocode_data[["country"]], 
-                                      country)
+        geocode_data[["county"]] <- c(geocode_data[["county"]], 
+                                      county)
         geocode_data[["state"]] <- c(geocode_data[["state"]], 
                                      state)
         geocode_data[["zip"]] <- c(geocode_data[["zip"]], 
@@ -341,8 +344,8 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
                                       street)
         geocode_data[["city"]] <- c(geocode_data[["city"]], 
                                     city)
-        geocode_data[["county"]] <- c(geocode_data[["country"]], 
-                                      country)
+        geocode_data[["county"]] <- c(geocode_data[["county"]], 
+                                      county)
         geocode_data[["state"]] <- c(geocode_data[["state"]], 
                                      state)
         geocode_data[["zip"]] <- c(geocode_data[["zip"]], 
