@@ -100,7 +100,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
   
   
   if (is.null(provider) || (provider %in% "photon")) {
-    url <- paste0("https://photon.komoot.de/reverse?lon=", 
+    url <- paste0("https://photon.komoot.io/reverse?lon=", 
                   longitude, "&lat=", latitude)
     
     responses <- async_download(url, provider)
