@@ -31,7 +31,7 @@
 #' @import jsonlite
 #' @export
 
-revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = NULL, item = NULL) 
+revgeo <- function (longitude, latitude, language = "en", provider = NULL, API = NULL, output = NULL, item = NULL) 
 {
   if (missing(provider)) {
     provider <- NULL
@@ -100,7 +100,7 @@ revgeo <- function (longitude, latitude, provider = NULL, API = NULL, output = N
   
   
   if (is.null(provider) || (provider %in% "photon")) {
-    url <- paste0("https://photon.komoot.io/reverse?lon=", 
+    url <- paste0("https://photon.komoot.io/reverse?lang=", language, "&lon=", 
                   longitude, "&lat=", latitude)
     
     responses <- async_download(url, provider)
