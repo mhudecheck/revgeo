@@ -1,6 +1,6 @@
 # Reverse Geocoding in R with Google Maps, Photon, and Bing
 
-NOTE: For now, please use the Github version if you plan use Photon.
+NOTE: For now, please use the Github version if you plan to use Photon.
 
 This code lets you reverse geocode coordinate pairs with Google Maps, Photon, and Bing.  As far as I'm aware, it's the first package in R which specifically allows you to the Photon geocoder for OpenStreetMaps or Bing to reverse geocode (as opposed to geocode).  This is pretty important, since the Google Maps API is limited to 2,500 free queries a day.
 
